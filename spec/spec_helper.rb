@@ -13,6 +13,11 @@ RSpec.configure do |config|
   class Redis
   end
 
+  class Elasticsearch
+    class Client
+    end
+  end
+
   def json_body
     @json_body ||= JSON.parse(last_response.body)
   end

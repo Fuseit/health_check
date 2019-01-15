@@ -81,5 +81,31 @@ RSpec.describe 'when used as middleware' do
         end
       end
     end
+
+    context 'elasticsearch' do
+      let(:cluster_information) { { 'status' => 'green' } }
+      let(:response) { double('response', body: cluster_information) }
+      let(:options) { { checks: [[:elasticsearch, { server_url: 'http://localhost:9200' }]] } }
+      let(:instance) { double('instance', perform_request: response) }
+      context 'when available' do
+        it 'is reported' do
+          allow(Elasticsearch::Client).to receive(:new).and_return(instance)
+          allow(instance).to receive(:connect)
+            .with('http://localhost:9200').and_return(response)
+          get '/health'
+          expect(json_body['elasticsearch']['status']).to eq('OK')
+          expect(json_body['elasticsearch']['value']).to eq('green')
+        end
+      end
+
+      context 'when not available' do
+        it 'is reported' do
+          Object.send(:remove_const, :Elasticsearch) if defined?(Elasticsearch)
+          get '/health'
+          expect(json_body['elasticsearch']['status']).to eq('ERROR')
+          expect(json_body['elasticsearch']['value']).to eq('Elasticsearch API not found')
+        end
+      end
+    end
   end
 end
