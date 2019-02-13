@@ -13,6 +13,9 @@ RSpec.configure do |config|
   class Redis
   end
 
+  class Sidekiq
+  end
+
   class Elasticsearch
     class Client
     end

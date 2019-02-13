@@ -107,5 +107,27 @@ RSpec.describe 'when used as middleware' do
         end
       end
     end
+
+    context 'sidekiq' do
+      let(:options) { { checks: [:sidekiq] } }
+      let(:response) { { 'redis_version' => '5.0.0' } }
+      context 'when available' do
+        it 'is reported', :aggregate_failures do
+          allow(Sidekiq).to receive(:redis).and_return(response)
+          get '/health'
+          expect(json_body['sidekiq']['status']).to eq('OK')
+          expect(json_body['sidekiq']['value']).to eq('5.0.0')
+        end
+      end
+
+      context 'when not available' do
+        it 'is reported', :aggregate_failures do
+          Object.send(:remove_const, :Sidekiq) if defined?(Sidekiq)
+          get '/health'
+          expect(json_body['sidekiq']['status']).to eq('ERROR')
+          expect(json_body['sidekiq']['value']).to eq('Sidekiq not defined')
+        end
+      end
+    end
   end
 end
