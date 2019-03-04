@@ -22,7 +22,9 @@ module Rack
         response_status = success ? OK : SERVER_ERROR
         response_headers = {'Content-Type' => 'application/json'}
         response_body = JSON.pretty_generate(check_results)
+        @app.logger.info response_body if @app
         [response_status, response_headers, [response_body]]
+
       elsif @app
         @app.call(env)
       else
