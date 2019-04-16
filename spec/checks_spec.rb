@@ -108,6 +108,36 @@ RSpec.describe 'when used as middleware' do
       end
     end
 
+    context 'faye' do
+      let(:options) { { checks: [[:faye, { server_url: 'http://localhost:9292/faye' }]] } }
+      let(:instance) { double('instance', started?: response) }
+      context 'when available' do
+        let(:response) { true }
+        it 'is reported' do
+          allow(::Net::HTTP).to receive(:new).and_return(instance)
+          allow(instance).to receive(:start)
+          allow(instance).to receive(:started?).and_return(response)
+          allow(instance).to receive(:finish)
+          get '/health'
+          expect(json_body['faye']['status']).to eq('OK')
+          expect(json_body['faye']['value']).to eq(response.to_s)
+        end
+      end
+
+    context 'when not available' do
+      let(:response) { false }
+      it 'is reported' do
+          allow(::Net::HTTP).to receive(:new).and_return(instance)
+          allow(instance).to receive(:start)
+          allow(instance).to receive(:started?).and_return(response)
+          allow(instance).to receive(:finish)
+        get '/health'
+        expect(json_body['faye']['status']).to eq('ERROR')
+        expect(json_body['faye']['value']).to eq('false')
+      end
+    end
+  end
+
     context 'sidekiq' do
       let(:options) { { checks: [:sidekiq] } }
       let(:response) { { 'redis_version' => '5.0.0' } }

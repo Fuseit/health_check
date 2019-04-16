@@ -10,6 +10,7 @@ Currently supports checks for the following dependencies:
 * Redis
 * Active Record Database 
 * Elasticsearch 
+* Faye
 
 ## Set up
 
