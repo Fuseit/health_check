@@ -1,4 +1,6 @@
 # health_check
+[![Build Status](https://circleci.com/gh/Fuseit/health_check/tree/master.svg?style=shield&circle-token=44d4f019603fa36a3bd6ecdd68a4a3af53e276b9)](https://circleci.com/gh/Fuseit/health_check/tree/master)
+
 A gem that provides an extensible rack-based health endpoint for applications and the resources they depend on. 
 
 
