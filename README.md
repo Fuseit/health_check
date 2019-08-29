@@ -56,7 +56,7 @@ Some checks (like `elasticsearch`) require additional paramaters for example:
 ```ruby
 # config.ru
 use Rack::HealthCheck, checks: [
-  :http, [:elasticsearch, { server_url: Figaro.env.elasticsearch_url! }]
+  :http, [:elasticsearch, { server_url: elasticsearch_url }]
 ]
 ```
 
@@ -100,3 +100,9 @@ For development the following additional dependencies are needed:
 'rspec', '~> 3.2.0'
 'rack-test', '~> 0.6.3'
 ```
+
+Copyright (c) [Fuse Universal][1] and other [contributors][2]. released under the [New BSD License][3]
+
+[1]: https://fuseuniversal.com
+[2]: https://github.com/Fuseit/health_check/graphs/contributors
+[3]: https://github.com/Fuseit/health_check/blob/master/LICENSE
